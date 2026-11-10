@@ -4,7 +4,7 @@ export const PavilionsLogo: React.FC = () => {
   return (
     <div className="flex items-center space-x-3 select-none shrink-0">
       {/* Official Crisp Logo Badge */}
-      <div className="w-12 h-12 rounded-full p-0.5 bg-white shadow-sm border-2 border-[#698A9A]/30 shrink-0 overflow-hidden">
+      <div className="w-10 h-10 rounded-full p-0.5 bg-white shadow-sm border-2 border-[#698A9A]/30 shrink-0 overflow-hidden">
         <img
           src="/assets/pavilions-logo-official.jpg"
           alt="The Pavilions Phuket Hotels & Resorts Logo"

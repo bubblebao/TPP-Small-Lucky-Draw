@@ -30,7 +30,7 @@ export const Header: React.FC<HeaderProps> = ({
       {/* Festive Pastel Party Top Accent Stripe */}
       <div className="h-1.5 w-full bg-gradient-to-r from-[#698A9A] via-[#FFB4A2] via-[#FFD166] to-[#A8DADC]" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
         {/* Left: Brand & Logo */}
         <div className="flex items-center space-x-5 shrink-0">
           <PavilionsLogo />
