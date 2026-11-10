@@ -64,7 +64,7 @@ export function App() {
     return () => document.removeEventListener('fullscreenchange', onFullscreenChange);
   }, []);
 
-  // Main Spin Handler with Strict Sequential Roll & Approaching Deceleration
+  // Main Spin Handler with Precision Timing (2s / 3.5s / 5s) & Sequential Deceleration
   const handleSpin = useCallback(() => {
     if (pool.length === 0 || drawState === 'SPINNING') return;
 
@@ -74,24 +74,28 @@ export function App() {
     // 2. Determine winner securely using CSPRNG
     const { picked: winnerNumber, entropyHex } = drawFromPool(sortedPool);
     const targetIndex = sortedPool.indexOf(winnerNumber);
+    const poolLen = sortedPool.length;
 
-    // 3. Determine start index
-    let startIndex = 0;
-    if (displayNumber !== null && sortedPool.includes(displayNumber)) {
-      startIndex = sortedPool.indexOf(displayNumber);
+    // 3. Calibrate steps and deceleration based strictly on the selected duration (2s, 3.5s, 5s)
+    let totalSteps = 45;
+    let decelStepsCount = 12;
+
+    if (settings.spinDurationMs <= 2200) {
+      // ⚡ Fast (2s)
+      totalSteps = Math.min(30, poolLen > 1 ? 30 : 1);
+      decelStepsCount = Math.min(9, totalSteps - 1);
+    } else if (settings.spinDurationMs >= 4500) {
+      // 🔥 Suspense (5s)
+      totalSteps = Math.min(65, poolLen > 1 ? 65 : 1);
+      decelStepsCount = Math.min(15, totalSteps - 1);
     } else {
-      startIndex = Math.floor(Math.random() * sortedPool.length);
+      // ⏱️ Standard (3.5s)
+      totalSteps = Math.min(45, poolLen > 1 ? 45 : 1);
+      decelStepsCount = Math.min(12, totalSteps - 1);
     }
 
-    // 4. Calculate total sequential steps to land exactly on winnerNumber
-    const duration = settings.spinDurationMs;
-    const poolLen = sortedPool.length;
-    const distance = (targetIndex - startIndex + poolLen) % poolLen;
-
-    // Ensure enough full laps so it feels like a real rolling wheel
-    const minSteps = Math.max(30, Math.floor(duration / 55));
-    const laps = Math.max(1, Math.ceil((minSteps - distance) / poolLen));
-    const totalSteps = laps * poolLen + distance;
+    // 4. Calculate startIndex so that walking sequentially for totalSteps lands EXACTLY on targetIndex!
+    const startIndex = (targetIndex - (totalSteps % poolLen) + poolLen) % poolLen;
 
     setDrawState('SPINNING');
 
@@ -104,15 +108,15 @@ export function App() {
 
       const remainingSteps = totalSteps - currentStep;
 
-      // Play tick sound (pitch rises slightly as it slows down to build suspense)
-      if (remainingSteps <= 10) {
-        soundFx.playTick(1.0 + (10 - remainingSteps) * 0.1);
+      // Pitch modulates slightly as it approaches winner to build suspense
+      if (remainingSteps <= 8) {
+        soundFx.playTick(1.0 + (8 - remainingSteps) * 0.12);
       } else {
         soundFx.playTick(1.0);
       }
 
       if (currentStep >= totalSteps) {
-        // Reached the winner exactly in sequential order!
+        // Reached the winner exactly in sequential order on target time!
         setDisplayNumber(winnerNumber);
         setLastEntropyHex(entropyHex);
         setDrawState('WINNER');
@@ -142,16 +146,21 @@ export function App() {
         return;
       }
 
-      // Calculate delay with realistic deceleration curve in the final stretch
-      let delay = 35; // baseline high speed
+      // Smooth deceleration curve calibrated to match the chosen duration
+      let delay = 32;
 
-      if (remainingSteps <= 12) {
-        // Exponential deceleration right before reaching the winner
-        // 12 -> 50ms, 8 -> 95ms, 4 -> 210ms, 2 -> 390ms, 1 -> 580ms
-        const factor = (13 - remainingSteps) / 12; // 0.08 to 1.0
-        delay = Math.round(45 + Math.pow(factor, 2.8) * 550);
-      } else if (remainingSteps <= 25) {
-        delay = 45;
+      if (remainingSteps <= decelStepsCount) {
+        const factor = (decelStepsCount + 1 - remainingSteps) / decelStepsCount; // 0.1 to 1.0
+        if (settings.spinDurationMs <= 2200) {
+          // Fast 2s curve: max delay ~380ms
+          delay = Math.round(35 + Math.pow(factor, 2.4) * 350);
+        } else if (settings.spinDurationMs >= 4500) {
+          // Suspense 5s curve: max delay ~580ms
+          delay = Math.round(40 + Math.pow(factor, 2.6) * 550);
+        } else {
+          // Standard 3.5s curve: max delay ~450ms
+          delay = Math.round(38 + Math.pow(factor, 2.5) * 420);
+        }
       }
 
       currentStep++;
@@ -159,7 +168,7 @@ export function App() {
     };
 
     executeNextStep();
-  }, [pool, drawState, settings.spinDurationMs, settings.autoConfetti, history, displayNumber]);
+  }, [pool, drawState, settings.spinDurationMs, settings.autoConfetti, history]);
 
   // Clean up timers
   useEffect(() => {
@@ -319,33 +328,40 @@ export function App() {
           totalCount={settings.totalNumbers}
         />
 
-        {/* Main Stage */}
-        <main className="max-w-7xl mx-auto w-full pt-4 pb-12">
-          <Stage
-            drawState={drawState}
-            displayNumber={displayNumber}
-            onSpin={handleSpin}
-            onUndo={handleUndoLatest}
-            canUndo={history.length > 0}
-            remainingCount={pool.length}
-            totalCount={settings.totalNumbers}
-            onOpenMatrix={() => setIsMatrixOpen(true)}
-            spinDurationMs={settings.spinDurationMs}
-            onChangeDuration={(duration) => {
-              const updated = { ...settings, spinDurationMs: duration };
-              setSettings(updated);
-              saveSettings(updated);
-            }}
-            lastEntropyHex={lastEntropyHex}
-          />
+        {/* Main 2-Column Split-Screen Dashboard Layout */}
+        <main className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-5">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            {/* Left Column: Stage & Action Controls (7 cols on lg, 8 cols on xl) */}
+            <div className="lg:col-span-7 xl:col-span-8 flex flex-col items-center">
+              <Stage
+                drawState={drawState}
+                displayNumber={displayNumber}
+                onSpin={handleSpin}
+                onUndo={handleUndoLatest}
+                canUndo={history.length > 0}
+                remainingCount={pool.length}
+                totalCount={settings.totalNumbers}
+                onOpenMatrix={() => setIsMatrixOpen(true)}
+                spinDurationMs={settings.spinDurationMs}
+                onChangeDuration={(duration) => {
+                  const updated = { ...settings, spinDurationMs: duration };
+                  setSettings(updated);
+                  saveSettings(updated);
+                }}
+                lastEntropyHex={lastEntropyHex}
+              />
+            </div>
 
-          {/* History Drawer */}
-          <HistoryLog history={history} onRestoreNumber={handleRestoreSpecific} />
+            {/* Right Column: History Log at Eye Level! (5 cols on lg, 4 cols on xl) */}
+            <div className="lg:col-span-5 xl:col-span-4 lg:sticky lg:top-24">
+              <HistoryLog history={history} onRestoreNumber={handleRestoreSpecific} />
+            </div>
+          </div>
         </main>
       </div>
 
       {/* Footer Branding */}
-      <footer className="w-full py-6 px-4 border-t-2 border-[#E2EDF0] bg-white/80 backdrop-blur-md text-center text-xs text-gray-500 relative z-10">
+      <footer className="w-full py-5 px-4 border-t-2 border-[#E2EDF0] bg-white/80 backdrop-blur-md text-center text-xs text-gray-500 relative z-10">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center space-x-2 font-bold text-gray-700">
             <span className="tracking-wider text-[#44595B]">THE PAVILIONS PHUKET</span>
