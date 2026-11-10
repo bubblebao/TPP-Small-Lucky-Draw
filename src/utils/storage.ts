@@ -93,12 +93,11 @@ export function exportHistoryToCSV(history: DrawRecord[]) {
     return;
   }
 
-  const headers = ['ลำดับการจับ (Order)', 'หมายเลขรางวัล (Lucky Number)', 'วันเวลาที่ออก (Timestamp)', 'Crypto Audit Ref (CSPRNG Hex)'];
+  const headers = ['ลำดับการจับ (Order)', 'หมายเลขรางวัล (Lucky Number)', 'วันเวลาที่ออก (Timestamp)'];
   const rows = history.map((item) => [
     item.sequence,
     `"${item.number.toString().padStart(3, '0')}"`,
     `"${item.timestamp}"`,
-    `"${item.entropyHex}"`,
   ]);
 
   const csvContent = '\uFEFF' + [headers.join(','), ...rows.map((r) => r.join(','))].join('\r\n');

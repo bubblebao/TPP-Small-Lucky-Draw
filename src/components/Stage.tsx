@@ -13,7 +13,6 @@ interface StageProps {
   onOpenMatrix: () => void;
   spinDurationMs: number;
   onChangeDuration: (duration: number) => void;
-  lastEntropyHex: string | null;
 }
 
 export const Stage: React.FC<StageProps> = ({
@@ -122,24 +121,28 @@ export const Stage: React.FC<StageProps> = ({
               )}
             </div>
 
-            {/* 3D Slot Drums */}
-            <div className="relative my-3 flex items-center justify-center gap-3 sm:gap-5">
+            {/* 3D Hero Slot Drums (Large & Dominant Focal Point) */}
+            <div className="relative my-4 sm:my-6 flex items-center justify-center gap-4 sm:gap-6 md:gap-8 w-full">
               {digits.map((digit, index) => (
                 <div
                   key={index}
-                  className={`pastel-digit-drum w-24 h-36 sm:w-28 sm:h-44 rounded-2xl sm:rounded-3xl flex items-center justify-center transition-all ${
+                  className={`pastel-digit-drum w-28 h-44 sm:w-36 sm:h-56 md:w-44 md:h-64 lg:w-48 lg:h-72 xl:w-56 xl:h-80 rounded-3xl sm:rounded-[36px] flex items-center justify-center transition-all duration-300 relative overflow-hidden ${
                     isWinner
-                      ? 'border-[#FFD166] shadow-[0_12px_25px_rgba(255,209,102,0.4)]'
+                      ? 'border-4 border-[#FFD166] shadow-[0_20px_45px_rgba(255,209,102,0.55)] scale-105'
                       : isSpinning
-                      ? 'border-cyan-300 shadow-[0_8px_20px_rgba(168,218,220,0.4)]'
-                      : 'border-gray-200'
+                      ? 'border-4 border-cyan-300 shadow-[0_12px_30px_rgba(168,218,220,0.5)] scale-[1.02]'
+                      : 'border-3 border-gray-200/90 shadow-md hover:border-gray-300'
                   }`}
                 >
-                  <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-14 bg-gradient-to-r from-transparent via-[#E2EDF0]/50 to-transparent pointer-events-none" />
+                  {/* Subtle 3D Cylindrical drum light reflection */}
+                  <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-16 sm:h-24 bg-gradient-to-r from-transparent via-[#E2EDF0]/60 to-transparent pointer-events-none" />
+                  <div className="absolute top-0 inset-x-0 h-10 bg-gradient-to-b from-black/5 to-transparent pointer-events-none" />
+                  <div className="absolute bottom-0 inset-x-0 h-10 bg-gradient-to-t from-black/5 to-transparent pointer-events-none" />
+
                   <span
-                    className={`font-mono font-black text-6xl sm:text-7xl select-none z-10 transition-all ${
+                    className={`font-mono font-black text-7xl sm:text-8xl md:text-9xl xl:text-[10rem] select-none z-10 transition-all ${
                       isWinner
-                        ? 'party-gradient-winner scale-110 drop-shadow-[0_6px_12px_rgba(255,107,139,0.3)]'
+                        ? 'party-gradient-winner scale-110 drop-shadow-[0_8px_16px_rgba(255,107,139,0.35)]'
                         : isSpinning
                         ? 'text-[#698A9A] animate-slot-blur-light opacity-90'
                         : 'text-[#1E293B] drop-shadow-sm'
@@ -191,29 +194,29 @@ export const Stage: React.FC<StageProps> = ({
                 onClick={onUndo}
                 disabled={!canUndo || isSpinning}
                 title="กดย้อนกลับกรณีเผลอกดผิด หรือต้องการคืนเลขล่าสุดเข้าโถสุ่ม"
-                className={`px-4 py-3.5 rounded-2xl flex items-center justify-center space-x-1.5 font-bold text-xs sm:text-sm transition-all border-2 shadow-sm shrink-0 ${
+                className={`px-4 sm:px-5 py-4 rounded-2xl sm:rounded-3xl flex items-center justify-center space-x-1.5 font-bold text-xs sm:text-base transition-all border-2 shadow-sm shrink-0 ${
                   canUndo && !isSpinning
                     ? 'bg-[#FFF0F3] hover:bg-[#FFE5EC] text-[#E05780] border-[#FFCAD4] hover:border-[#FF8FA3] active:scale-95'
                     : 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed opacity-50'
                 }`}
               >
-                <RotateCcw size={16} />
+                <RotateCcw size={18} />
                 <span>ย้อนกลับ</span>
               </button>
 
-              {/* Giant Party Spin Button */}
+              {/* Giant Party Spin Button (The Hero Action) */}
               <button
                 onClick={onSpin}
                 disabled={isSpinning || isCompleted}
-                className={`flex-1 py-3.5 px-6 rounded-2xl font-black text-lg sm:text-xl flex items-center justify-center space-x-2.5 transition-all ${
+                className={`flex-1 py-4 sm:py-5 px-6 sm:px-8 rounded-2xl sm:rounded-3xl font-black text-xl sm:text-2xl flex items-center justify-center space-x-3 transition-all shadow-md hover:shadow-xl active:scale-[0.98] ${
                   isSpinning || isCompleted
                     ? 'bg-gray-200 text-gray-400 border-2 border-gray-300 cursor-not-allowed'
                     : 'party-btn-spin'
                 }`}
               >
-                <Play size={22} className={isSpinning ? 'animate-spin' : 'fill-current'} />
+                <Play size={26} className={isSpinning ? 'animate-spin' : 'fill-current'} />
                 <span>{isSpinning ? 'กำลังสุ่ม...' : isCompleted ? 'ครบทุกรางวัลแล้ว' : 'สุ่มรางวัล (SPIN)'}</span>
-                <span className="hidden sm:inline-block text-[10px] bg-white/30 text-white font-mono font-black px-2 py-0.5 rounded-md shadow-sm">
+                <span className="hidden sm:inline-block text-[11px] bg-white/30 text-white font-mono font-black px-2.5 py-0.5 rounded-md shadow-sm">
                   Spacebar
                 </span>
               </button>
@@ -223,9 +226,9 @@ export const Stage: React.FC<StageProps> = ({
                 onClick={onOpenMatrix}
                 disabled={isSpinning}
                 title="เปิดดูเลข 1-205 ทั้งหมด หรือคลิกคืนเลขเข้าโถได้ด้วยตนเอง"
-                className="px-4 py-3.5 rounded-2xl bg-[#E8F8F5] hover:bg-[#D1F2EB] text-[#117A65] border-2 border-[#A3E4D7] font-bold text-xs sm:text-sm flex items-center justify-center space-x-1.5 transition-all active:scale-95 shadow-sm shrink-0"
+                className="px-4 sm:px-5 py-4 rounded-2xl sm:rounded-3xl bg-[#E8F8F5] hover:bg-[#D1F2EB] text-[#117A65] border-2 border-[#A3E4D7] font-bold text-xs sm:text-base flex items-center justify-center space-x-1.5 transition-all active:scale-95 shadow-sm shrink-0"
               >
-                <SlidersHorizontal size={16} />
+                <SlidersHorizontal size={18} />
                 <span>ผังเลข</span>
               </button>
             </div>

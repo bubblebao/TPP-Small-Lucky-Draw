@@ -29,10 +29,6 @@ export function App() {
     const savedHistory = loadSavedHistory();
     return savedHistory.length > 0 ? savedHistory[0].number : null;
   });
-  const [lastEntropyHex, setLastEntropyHex] = useState<string | null>(() => {
-    const savedHistory = loadSavedHistory();
-    return savedHistory.length > 0 ? savedHistory[0].entropyHex : null;
-  });
 
   // Modal states
   const [isMatrixOpen, setIsMatrixOpen] = useState(false);
@@ -139,7 +135,6 @@ export function App() {
       if (currentStep >= totalSteps) {
         // Reached the winner in full sequential cycle on target time!
         setDisplayNumber(winnerNumber);
-        setLastEntropyHex(entropyHex);
         setDrawState('WINNER');
 
         // Update pool and history
@@ -205,7 +200,6 @@ export function App() {
     saveHistory(remainingHistory);
 
     setDisplayNumber(remainingHistory.length > 0 ? remainingHistory[0].number : null);
-    setLastEntropyHex(remainingHistory.length > 0 ? remainingHistory[0].entropyHex : null);
     setDrawState('IDLE');
 
     soundFx.playUndo();
@@ -276,7 +270,6 @@ export function App() {
       saveHistory(newHistory);
 
       setDisplayNumber(num);
-      setLastEntropyHex('MANUAL');
       setDrawState('WINNER');
 
       soundFx.playWinnerFanfare();
@@ -292,7 +285,6 @@ export function App() {
     setPool(freshPool);
     setHistory(freshHistory);
     setDisplayNumber(null);
-    setLastEntropyHex(null);
     setDrawState('IDLE');
     soundFx.playUndo();
   };
@@ -341,11 +333,11 @@ export function App() {
           totalCount={settings.totalNumbers}
         />
 
-        {/* Main 2-Column Split-Screen Dashboard Layout (Balanced & Equal-Height) */}
-        <main className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-5">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-            {/* Left Column: Stage & Integrated Controls (7 cols on lg) */}
-            <div className="lg:col-span-7 flex flex-col">
+        {/* Main Hero Stage & Compact History Sidebar Layout (Laptop 15.6" & Projector Optimized) */}
+        <main className="max-w-[1580px] mx-auto w-full px-4 sm:px-6 lg:px-8 py-4 sm:py-5">
+          <div className="flex flex-col lg:flex-row gap-5 xl:gap-7 items-stretch">
+            {/* Dominant Hero Stage (72% - 75% on Laptop / Desktop) */}
+            <div className="flex-1 min-w-0 flex flex-col">
               <Stage
                 drawState={drawState}
                 displayNumber={displayNumber}
@@ -361,12 +353,11 @@ export function App() {
                   setSettings(updated);
                   saveSettings(updated);
                 }}
-                lastEntropyHex={lastEntropyHex}
               />
             </div>
 
-            {/* Right Column: History Log at Eye Level with Matching Height (5 cols on lg) */}
-            <div className="lg:col-span-5 flex flex-col">
+            {/* Compact History Sidebar (25% - 28% on Laptop / Desktop, snug & neat) */}
+            <div className="w-full lg:w-[350px] xl:w-[390px] shrink-0 flex flex-col">
               <HistoryLog history={history} onRestoreNumber={handleRestoreSpecific} />
             </div>
           </div>

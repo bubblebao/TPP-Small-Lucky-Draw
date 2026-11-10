@@ -38,7 +38,7 @@ export const HistoryLog: React.FC<HistoryLogProps> = ({ history, onRestoreNumber
       </div>
 
       {/* Main Matching Card Container */}
-      <div className="pastel-card rounded-[32px] p-6 sm:p-7 border-2 border-white/90 shadow-md flex-1 flex flex-col justify-between min-h-[520px]">
+      <div className="pastel-card rounded-[32px] p-5 sm:p-6 border-2 border-white/90 shadow-md flex-1 flex flex-col justify-between min-h-[520px]">
         {/* Top: Header & Search */}
         <div className="pb-3 border-b-2 border-gray-100 flex flex-col gap-3">
           <div className="flex items-center justify-between">
@@ -94,7 +94,7 @@ export const HistoryLog: React.FC<HistoryLogProps> = ({ history, onRestoreNumber
         </div>
 
         {/* Center: List Content with flexible vertical scroll */}
-        <div className="flex-1 my-2 overflow-y-auto max-h-[420px] pr-1 space-y-2">
+        <div className="flex-1 my-2 overflow-y-auto max-h-[480px] xl:max-h-[540px] pr-1 space-y-2">
           {history.length === 0 ? (
             <div className="h-full flex flex-col items-center justify-center py-12 text-center text-gray-400">
               <div className="w-14 h-14 rounded-full bg-gray-50 border-2 border-gray-100 flex items-center justify-center mx-auto mb-2 text-gray-400 shadow-inner">
