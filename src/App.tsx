@@ -261,13 +261,14 @@ export function App() {
   const drawnNumberList = history.map((h) => h.number);
 
   return (
-    <div className="gala-bg text-white min-h-screen flex flex-col justify-between relative selection:bg-amber-400 selection:text-black">
-      {/* Ambient Floating Celebration Particles */}
+    <div className="pastel-party-bg text-[#2D3748] min-h-screen flex flex-col justify-between relative selection:bg-[#FFD166] selection:text-[#2D3748]">
+      {/* Ambient Floating Pastel Party Confetti Shapes */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-        <div className="absolute top-1/4 left-10 w-2 h-2 rounded-full bg-[#F5CE62] animate-float-1" />
-        <div className="absolute top-1/3 right-16 w-3 h-3 rounded-full bg-cyan-400/60 animate-float-2" />
-        <div className="absolute top-2/3 left-1/4 w-2 h-2 rounded-full bg-amber-400/70 animate-float-3" />
-        <div className="absolute top-1/2 right-1/3 w-1.5 h-1.5 rounded-full bg-white/50 animate-float-1" />
+        <div className="absolute top-1/4 left-10 w-4 h-4 rounded-full bg-[#FFCAD4] animate-confetti-1" />
+        <div className="absolute top-1/3 right-16 w-5 h-5 rounded-lg rotate-45 bg-[#A8DADC] animate-confetti-2" />
+        <div className="absolute top-2/3 left-1/4 w-4 h-4 rounded-full bg-[#FFEAA7] animate-confetti-3" />
+        <div className="absolute top-1/2 right-1/3 w-3 h-3 rounded-full bg-[#FFB4A2] animate-confetti-4" />
+        <div className="absolute top-12 left-1/2 w-4 h-4 rounded-lg rotate-12 bg-[#D8B4E2] animate-confetti-1" />
       </div>
 
       <div className="relative z-10">
@@ -290,7 +291,7 @@ export function App() {
         />
 
         {/* Main Stage */}
-        <main className="max-w-7xl mx-auto w-full pt-4 pb-10">
+        <main className="max-w-7xl mx-auto w-full pt-4 pb-12">
           <Stage
             drawState={drawState}
             displayNumber={displayNumber}
@@ -315,19 +316,19 @@ export function App() {
       </div>
 
       {/* Footer Branding */}
-      <footer className="w-full py-6 px-4 border-t border-white/10 bg-[#070b14]/90 text-center text-xs text-gray-400 relative z-10">
+      <footer className="w-full py-6 px-4 border-t-2 border-[#E2EDF0] bg-white/80 backdrop-blur-md text-center text-xs text-gray-500 relative z-10">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="flex items-center space-x-2">
-            <span className="font-extrabold tracking-wider text-[#F5CE62]">THE PAVILIONS PHUKET</span>
-            <span className="text-gray-600">•</span>
-            <span className="text-gray-400">Luxury Hotels & Resorts</span>
+          <div className="flex items-center space-x-2 font-bold text-gray-700">
+            <span className="tracking-wider text-[#44595B]">THE PAVILIONS PHUKET</span>
+            <span className="text-gray-300">•</span>
+            <span className="text-[#698A9A]">Hotels & Resorts</span>
           </div>
-          <div className="flex items-center space-x-3 text-[11px] text-gray-500">
+          <div className="flex items-center space-x-3 text-[11px] text-gray-500 font-medium">
             <span>Offline LocalStorage Ready</span>
             <span>•</span>
-            <span className="text-emerald-400 font-semibold">100% Client-Side Safe</span>
+            <span className="text-emerald-700 font-bold">100% Client-Side Safe</span>
             <span>•</span>
-            <span className="text-[#F5CE62] font-semibold">Deployable on Netlify</span>
+            <span className="text-[#E07A5F] font-bold">Ready for Netlify</span>
           </div>
         </div>
       </footer>

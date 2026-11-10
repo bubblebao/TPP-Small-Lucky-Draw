@@ -26,9 +26,9 @@ export const Header: React.FC<HeaderProps> = ({
   totalCount,
 }) => {
   return (
-    <header className="w-full bg-[#0d1424]/85 border-b border-[#44595B]/60 backdrop-blur-xl sticky top-0 z-40 transition-all shadow-xl">
-      {/* Subtle brand theme gradient accent stripe at top edge */}
-      <div className="h-1 w-full bg-gradient-to-r from-[#44595B] via-[#698A9A] to-[#D4AF37]" />
+    <header className="w-full bg-white/90 border-b-2 border-[#E2EDF0] backdrop-blur-md sticky top-0 z-40 transition-all shadow-sm">
+      {/* Festive Pastel Party Top Accent Stripe */}
+      <div className="h-1.5 w-full bg-gradient-to-r from-[#698A9A] via-[#FFB4A2] via-[#FFD166] to-[#A8DADC]" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         {/* Brand & Logo */}
@@ -36,23 +36,23 @@ export const Header: React.FC<HeaderProps> = ({
           <PavilionsLogo size="md" />
 
           {/* Event Title Divider (Desktop) */}
-          <div className="hidden lg:flex items-center space-x-3 pl-6 border-l border-white/10">
-            <span className="text-xs uppercase tracking-widest text-[#698A9A] font-bold">Event</span>
-            <h1 className="text-lg font-extrabold gold-gradient-title tracking-wider">
-              SMALL LUCKY DRAW 2026
+          <div className="hidden lg:flex items-center space-x-3 pl-6 border-l-2 border-gray-200">
+            <span className="text-xs uppercase tracking-widest text-[#698A9A] font-bold">Party Event</span>
+            <h1 className="text-xl font-black party-gradient-title tracking-wide">
+              🎉 SMALL LUCKY DRAW 2026 🎉
             </h1>
           </div>
         </div>
 
-        {/* Center Live Indicator */}
-        <div className="hidden md:flex items-center space-x-3 bg-[#162033]/90 border border-[#698A9A]/40 px-5 py-2 rounded-full shadow-inner">
-          <span className="relative flex h-2.5 w-2.5">
+        {/* Center Live Indicator (Bright Pastel Pill) */}
+        <div className="hidden md:flex items-center space-x-3 bg-[#F0F7F9] border-2 border-[#CBE3E7] px-5 py-2 rounded-full shadow-sm">
+          <span className="relative flex h-3 w-3">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+            <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
           </span>
-          <span className="text-xs text-gray-300 font-medium">คงเหลือ:</span>
-          <span className="text-base font-extrabold text-[#F5CE62] font-mono">{remainingCount}</span>
-          <span className="text-xs text-gray-400">/ {totalCount} รางวัล</span>
+          <span className="text-xs text-gray-600 font-bold">คงเหลือ:</span>
+          <span className="text-base font-black text-[#2C3E50] font-mono">{remainingCount}</span>
+          <span className="text-xs text-gray-500 font-medium">/ {totalCount} รางวัล</span>
         </div>
 
         {/* Action Controls */}
@@ -61,10 +61,10 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             onClick={onToggleSound}
             title={soundEnabled ? 'ปิดเสียง (Mute)' : 'เปิดเสียง (Unmute)'}
-            className={`p-2.5 rounded-xl border transition-all ${
+            className={`p-2.5 rounded-2xl border-2 transition-all shadow-sm ${
               soundEnabled
-                ? 'bg-[#1b263b] border-[#F5CE62]/40 text-[#F5CE62] hover:bg-[#22304a] shadow-sm'
-                : 'bg-[#0f172a] border-gray-700 text-gray-400 hover:text-white'
+                ? 'bg-[#FFF9E6] border-[#FFEAA7] text-[#D97706] hover:bg-[#FFF3B0]'
+                : 'bg-gray-100 border-gray-200 text-gray-400 hover:text-gray-700'
             }`}
           >
             {soundEnabled ? <Volume2 size={18} /> : <VolumeX size={18} />}
@@ -74,17 +74,17 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             onClick={onOpenMatrix}
             title="เปิดดูและจัดการเลข 1-205 (Pool Matrix)"
-            className="flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-[#1b263b] hover:bg-[#253552] border border-[#698A9A]/50 text-gray-200 hover:text-[#F5CE62] hover:border-[#F5CE62]/60 transition-all text-xs font-semibold shadow-sm"
+            className="flex items-center space-x-1.5 px-4 py-2.5 rounded-2xl bg-[#E8F8F5] hover:bg-[#D1F2EB] border-2 border-[#A3E4D7] text-[#117A65] transition-all text-xs font-bold shadow-sm active:scale-95"
           >
             <Grid size={16} />
-            <span className="hidden sm:inline">โถสุ่มเลข</span>
+            <span className="hidden sm:inline">โถสุ่มเลข (1–{totalCount})</span>
           </button>
 
           {/* Rules / Conditions */}
           <button
             onClick={onOpenRules}
             title="เงื่อนไขและกติกาการจับรางวัล"
-            className="flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-[#1b263b] hover:bg-[#253552] border border-[#698A9A]/50 text-gray-200 hover:text-white transition-all text-xs font-semibold shadow-sm"
+            className="flex items-center space-x-1.5 px-4 py-2.5 rounded-2xl bg-[#FFF0F3] hover:bg-[#FFE5EC] border-2 border-[#FFCAD4] text-[#E05780] transition-all text-xs font-bold shadow-sm active:scale-95"
           >
             <FileText size={16} />
             <span className="hidden sm:inline">เงื่อนไข</span>
@@ -94,7 +94,7 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             onClick={onOpenSettings}
             title="ตั้งค่าระบบ"
-            className="p-2.5 rounded-xl bg-[#1b263b] hover:bg-[#253552] border border-gray-700 text-gray-300 hover:text-white transition-all"
+            className="p-2.5 rounded-2xl bg-gray-50 hover:bg-gray-100 border-2 border-gray-200 text-gray-600 hover:text-gray-900 transition-all shadow-sm"
           >
             <Settings size={18} />
           </button>
@@ -103,7 +103,7 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             onClick={onToggleFullscreen}
             title={isFullscreen ? 'ออกจากโหมดเต็มจอ' : 'แสดงเต็มจอ (Fullscreen Presentation)'}
-            className="p-2.5 rounded-xl bg-[#1b263b] hover:bg-[#253552] border border-gray-700 text-gray-300 hover:text-[#F5CE62] transition-all"
+            className="p-2.5 rounded-2xl bg-gray-50 hover:bg-gray-100 border-2 border-gray-200 text-gray-600 hover:text-[#698A9A] transition-all shadow-sm"
           >
             {isFullscreen ? <Minimize2 size={18} /> : <Maximize2 size={18} />}
           </button>
