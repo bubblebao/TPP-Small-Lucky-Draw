@@ -1,0 +1,108 @@
+import React from 'react';
+import { X, Calendar, MapPin, Clock, Award, ShieldAlert } from 'lucide-react';
+
+interface RulesModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export const RulesModal: React.FC<RulesModalProps> = ({ isOpen, onClose }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fade-in">
+      <div className="bg-[#0f172a] border border-[#F5CE62]/40 rounded-3xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden">
+        {/* Header */}
+        <div className="px-6 py-5 border-b border-white/10 flex items-center justify-between bg-gradient-to-r from-[#1e293b] via-[#111827] to-[#1e293b]">
+          <div className="flex items-center space-x-3.5">
+            <div className="p-2.5 rounded-2xl bg-gradient-to-br from-amber-400/20 to-yellow-600/30 text-[#F5CE62] border border-[#F5CE62]/30">
+              <Award size={22} />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-white">เงื่อนไขและกติกาการจับรางวัล</h2>
+              <p className="text-xs text-[#8ba6b4]">Small Lucky Draw - The Pavilions Phuket</p>
+            </div>
+          </div>
+
+          <button
+            onClick={onClose}
+            className="p-2.5 rounded-xl text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
+          >
+            <X size={20} />
+          </button>
+        </div>
+
+        {/* Content */}
+        <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-[#080d18]">
+          {/* Event Details Card */}
+          <div className="bg-[#162033] border border-white/10 rounded-2xl p-4 flex flex-wrap gap-4 justify-between items-center text-xs shadow-inner">
+            <div className="flex items-center space-x-2 text-gray-200">
+              <MapPin size={16} className="text-[#F5CE62]" />
+              <span>สถานที่: <strong className="text-white">Board Room</strong></span>
+            </div>
+            <div className="flex items-center space-x-2 text-gray-200">
+              <Calendar size={16} className="text-[#F5CE62]" />
+              <span>วันพุธที่ 11 พฤศจิกายน 2569</span>
+            </div>
+            <div className="flex items-center space-x-2 text-gray-200">
+              <Clock size={16} className="text-[#F5CE62]" />
+              <span>เวลา 14:30 – 17:00 น.</span>
+            </div>
+          </div>
+
+          {/* 4 Conditions */}
+          <div className="space-y-3">
+            <h3 className="text-xs font-bold text-[#F5CE62] uppercase tracking-wider flex items-center gap-2">
+              <ShieldAlert size={16} />
+              เงื่อนไขการรับรางวัล (Conditions)
+            </h3>
+
+            <div className="space-y-3">
+              <div className="bg-[#121929] border border-white/10 p-4 rounded-2xl flex items-start space-x-3.5 shadow-sm">
+                <span className="flex-shrink-0 w-7 h-7 rounded-full bg-gradient-to-br from-amber-400 to-yellow-600 text-black flex items-center justify-center font-black text-xs shadow-md">1</span>
+                <div className="text-xs text-gray-300 space-y-1">
+                  <p className="font-bold text-white text-sm">All staff are entitled to have small lucky draw for 1 piece.</p>
+                  <p className="text-gray-400">พนักงานทุกคนมีสิทธิ์จับรางวัลเล็ก คนละ 1 รางวัล</p>
+                </div>
+              </div>
+
+              <div className="bg-[#121929] border border-white/10 p-4 rounded-2xl flex items-start space-x-3.5 shadow-sm">
+                <span className="flex-shrink-0 w-7 h-7 rounded-full bg-gradient-to-br from-amber-400 to-yellow-600 text-black flex items-center justify-center font-black text-xs shadow-md">2</span>
+                <div className="text-xs text-gray-300 space-y-1">
+                  <p className="font-bold text-white text-sm">Staff is unable to exchange the gift from the center. However, they can change between themselves.</p>
+                  <p className="text-gray-400">พนักงานไม่สามารถแลกของขวัญจากกองกลางได้ หากจะแลกให้แลกระหว่างพนักงานด้วยกันเอง</p>
+                </div>
+              </div>
+
+              <div className="bg-[#121929] border border-white/10 p-4 rounded-2xl flex items-start space-x-3.5 shadow-sm">
+                <span className="flex-shrink-0 w-7 h-7 rounded-full bg-gradient-to-br from-amber-400 to-yellow-600 text-black flex items-center justify-center font-black text-xs shadow-md">3</span>
+                <div className="text-xs text-gray-300 space-y-1">
+                  <p className="font-bold text-white text-sm">Staff who is busy during that time can appoint any one to draw the gift for them.</p>
+                  <p className="text-gray-400">หากพนักงานไม่สามารถมาจับรางวัลได้ด้วยตนเอง ให้ส่งตัวแทนมา โดยฝ่ายบุคคล (HR) จะบันทึกไว้ในแบบฟอร์มและถ่ายรูปไว้เป็นหลักฐาน</p>
+                </div>
+              </div>
+
+              <div className="bg-[#121929] border border-white/10 p-4 rounded-2xl flex items-start space-x-3.5 shadow-sm">
+                <span className="flex-shrink-0 w-7 h-7 rounded-full bg-gradient-to-br from-amber-400 to-yellow-600 text-black flex items-center justify-center font-black text-xs shadow-md">4</span>
+                <div className="text-xs text-gray-300 space-y-1">
+                  <p className="font-bold text-white text-sm">HR and Staff Committee will assist to take care this event and record all the gift numbers in the registration form.</p>
+                  <p className="text-gray-400">ฝ่ายบุคคลและคณะกรรมการจะช่วยกันดูแลการจับรางวัลและบันทึกหมายเลขรางวัลลงในแบบฟอร์มลงทะเบียน</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="px-6 py-4 bg-[#0d1424] border-t border-white/10 flex justify-end">
+          <button
+            onClick={onClose}
+            className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 text-black font-extrabold text-xs transition-all hover:brightness-110 shadow-lg"
+          >
+            รับทราบและปิดหน้าต่าง
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};

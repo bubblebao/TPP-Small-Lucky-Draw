@@ -1,0 +1,188 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: 'Prompt', 'Montserrat', sans-serif;
+    background-color: #080c14;
+    overflow-x: hidden;
+  }
+  
+  h1, h2, h3, .font-serif {
+    font-family: 'Montserrat', 'Prompt', sans-serif;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(10, 15, 25, 0.8);
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #D4AF37;
+}
+
+/* Vibrant Gala Stage Background with Spotlights */
+.gala-bg {
+  background: 
+    radial-gradient(circle at 50% -10%, rgba(212, 175, 55, 0.28) 0%, transparent 60%),
+    radial-gradient(circle at 15% 30%, rgba(105, 138, 154, 0.22) 0%, transparent 50%),
+    radial-gradient(circle at 85% 30%, rgba(68, 89, 91, 0.25) 0%, transparent 50%),
+    radial-gradient(circle at 50% 100%, rgba(15, 23, 42, 0.9) 0%, transparent 70%),
+    linear-gradient(180deg, #0b111e 0%, #060911 100%);
+  min-height: 100vh;
+}
+
+/* Radiant Gold Text */
+.gold-text-glow {
+  background: linear-gradient(180deg, #FFFFFF 0%, #FFF1B8 25%, #E5B338 65%, #996B07 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 8px rgba(212, 175, 55, 0.4));
+}
+
+.gold-gradient-title {
+  background: linear-gradient(135deg, #FFF9E6 0%, #F5CE62 50%, #C99318 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 3D Golden Stage Frame */
+.gold-stage-frame {
+  background: linear-gradient(145deg, #2a2415 0%, #161a24 50%, #111520 100%);
+  border: 2px solid rgba(245, 206, 98, 0.5);
+  box-shadow: 
+    0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+    0 15px 45px rgba(0, 0, 0, 0.7),
+    0 0 50px rgba(212, 175, 55, 0.25);
+  position: relative;
+}
+
+.gold-stage-frame-active {
+  background: linear-gradient(145deg, #382c12 0%, #1a1e2d 50%, #111420 100%);
+  border: 2px solid rgba(255, 223, 110, 0.9);
+  box-shadow: 
+    0 0 0 2px rgba(255, 245, 180, 0.3) inset,
+    0 20px 60px rgba(0, 0, 0, 0.8),
+    0 0 80px rgba(245, 206, 98, 0.5),
+    0 0 120px rgba(212, 175, 55, 0.2);
+}
+
+/* 3D Digit Slot Drum Reel */
+.digit-drum {
+  background: linear-gradient(180deg, #090d16 0%, #131b2e 50%, #070a12 100%);
+  box-shadow: 
+    inset 0 12px 18px -4px rgba(0, 0, 0, 0.95),
+    inset 0 -12px 18px -4px rgba(0, 0, 0, 0.95),
+    0 6px 16px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(245, 206, 98, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.digit-drum::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+/* Golden 3D Spin Button */
+.spin-btn-3d {
+  background: linear-gradient(180deg, #FDE68A 0%, #F59E0B 45%, #D97706 80%, #B45309 100%);
+  box-shadow: 
+    0 1px 0 rgba(255, 255, 255, 0.5) inset,
+    0 6px 0 #92400E,
+    0 12px 25px rgba(217, 119, 6, 0.45);
+  color: #1E1B18;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.6);
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.spin-btn-3d:hover:not(:disabled) {
+  filter: brightness(1.08);
+  box-shadow: 
+    0 1px 0 rgba(255, 255, 255, 0.7) inset,
+    0 7px 0 #92400E,
+    0 16px 35px rgba(245, 158, 11, 0.6);
+  transform: translateY(-2px);
+}
+
+.spin-btn-3d:active:not(:disabled) {
+  transform: translateY(4px);
+  box-shadow: 
+    0 1px 0 rgba(255, 255, 255, 0.2) inset,
+    0 2px 0 #92400E,
+    0 4px 12px rgba(217, 119, 6, 0.3);
+}
+
+/* Frosted Glass Panels */
+.glass-panel-v2 {
+  background: rgba(18, 24, 38, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+/* Ambient Floating Particles */
+@keyframes float-particle {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateY(-25px) translateX(15px);
+    opacity: 0.8;
+  }
+}
+
+.animate-float-1 { animation: float-particle 5s ease-in-out infinite; }
+.animate-float-2 { animation: float-particle 7s ease-in-out infinite 1s; }
+.animate-float-3 { animation: float-particle 6s ease-in-out infinite 2.5s; }
+
+/* Rolling Blur Animation */
+@keyframes slot-blur-spin {
+  0% { transform: translateY(-10%); filter: blur(0px); }
+  50% { transform: translateY(10%); filter: blur(2px); }
+  100% { transform: translateY(-10%); filter: blur(0px); }
+}
+
+.animate-slot-blur {
+  animation: slot-blur-spin 0.08s infinite linear;
+}
+
+/* Print Stylesheet for HR Sign-off Sheet */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #111827 !important;
+  }
+
+  header, footer, .stage-controls, button, .no-print {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  .glass-panel-v2 {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: none !important;
+    color: #111827 !important;
+  }
+}
