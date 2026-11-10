@@ -64,7 +64,7 @@ export function App() {
     return () => document.removeEventListener('fullscreenchange', onFullscreenChange);
   }, []);
 
-  // Main Spin Handler with Full 205-Number Cycle & Approaching Deceleration (5s / 7s / 9s)
+  // Main Spin Handler: Randomized Starting Point + Full 205-Cycle Guarantee + Approaching Deceleration (3s / 5s / 7s)
   const handleSpin = useCallback(() => {
     if (pool.length === 0 || drawState === 'SPINNING') return;
 
@@ -76,36 +76,47 @@ export function App() {
     const { picked: winnerNumber, entropyHex } = drawFromPool(sortedPool);
     const targetIndex = sortedPool.indexOf(winnerNumber);
 
-    // 3. Determine start index (from current number or 0)
-    let startIndex = 0;
-    if (displayNumber !== null && sortedPool.includes(displayNumber)) {
-      startIndex = sortedPool.indexOf(displayNumber);
-    } else {
-      startIndex = 0;
-    }
+    // 3. Randomize starting point organically on every spin!
+    const startIndex = Math.floor(Math.random() * poolLen);
 
     // 4. Full Cycle Guarantee: Must cycle through ALL numbers in the pool at least once!
-    const duration = settings.spinDurationMs; // 5000, 7000, 9000
+    const duration = settings.spinDurationMs; // 3000, 5000, 7000
     let minLaps = 1;
 
-    if (duration >= 8500) {
-      // 🔥 9s: 3 full cycles
+    if (duration >= 6500) {
+      // 🔥 7s: 2 full cycles (or 3 for smaller pools)
       minLaps = poolLen >= 150 ? 2 : 3;
-    } else if (duration >= 6500) {
-      // ⏱️ 7s: 2 full cycles
-      minLaps = poolLen >= 150 ? 2 : 2;
+    } else if (duration >= 4500) {
+      // ⏱️ 5s: 1-2 full cycles
+      minLaps = poolLen >= 150 ? 1 : 2;
     } else {
-      // ⚡ 5s: 1 full cycle
+      // ⚡ 3s: 1 full cycle
       minLaps = 1;
     }
 
     const distance = (targetIndex - startIndex + poolLen) % poolLen;
     const totalSteps = minLaps * poolLen + distance;
 
-    const decelStepsCount = Math.min(16, Math.max(8, Math.floor(totalSteps * 0.15)));
-    const decelDurationTarget = duration >= 8000 ? 2600 : duration >= 6500 ? 2200 : 1800;
+    // Deceleration steps count calibrated for 3s / 5s / 7s
+    let decelStepsCount = 14;
+    let decelDurationTarget = 1800;
+
+    if (duration <= 3500) {
+      // 3s: snappy 11-step deceleration (~1100ms)
+      decelStepsCount = Math.min(11, Math.max(6, Math.floor(totalSteps * 0.12)));
+      decelDurationTarget = 1100;
+    } else if (duration >= 6500) {
+      // 7s: long suspenseful 18-step deceleration (~2400ms)
+      decelStepsCount = Math.min(18, Math.max(10, Math.floor(totalSteps * 0.16)));
+      decelDurationTarget = 2400;
+    } else {
+      // 5s: standard 14-step deceleration (~1800ms)
+      decelStepsCount = Math.min(14, Math.max(8, Math.floor(totalSteps * 0.14)));
+      decelDurationTarget = 1800;
+    }
+
     const fastStepsCount = Math.max(1, totalSteps - decelStepsCount);
-    const fastDelay = Math.max(9, Math.floor((duration - decelDurationTarget) / fastStepsCount));
+    const fastDelay = Math.max(7, Math.floor((duration - decelDurationTarget) / fastStepsCount));
 
     setDrawState('SPINNING');
 
@@ -118,11 +129,10 @@ export function App() {
 
       const remainingSteps = totalSteps - currentStep;
 
-      // Sound FX: Smooth wheel ticker during fast spin, individual ticks during deceleration
+      // Sound FX: Smooth wheel clicker during fast full cycle, individual ticks during deceleration
       if (remainingSteps <= decelStepsCount) {
         soundFx.playTick(1.0 + (decelStepsCount - remainingSteps) * 0.08);
       } else if (currentStep % 4 === 0) {
-        // Play click every 4th number during high-speed cycle for smooth audio
         soundFx.playTick(0.9);
       }
 
@@ -157,13 +167,13 @@ export function App() {
         return;
       }
 
-      // Deceleration curve for the final stretch
+      // Deceleration curve for the final stretch into the winner
       let delay = fastDelay;
 
       if (remainingSteps <= decelStepsCount) {
         const factor = (decelStepsCount + 1 - remainingSteps) / decelStepsCount; // 0.1 to 1.0
-        const maxDecelDelay = duration >= 8000 ? 620 : duration >= 6500 ? 520 : 420;
-        delay = Math.round(fastDelay + Math.pow(factor, 2.5) * (maxDecelDelay - fastDelay));
+        const maxDecelDelay = duration >= 6500 ? 550 : duration <= 3500 ? 380 : 460;
+        delay = Math.round(fastDelay + Math.pow(factor, 2.4) * (maxDecelDelay - fastDelay));
       }
 
       currentStep++;
@@ -171,7 +181,7 @@ export function App() {
     };
 
     executeNextStep();
-  }, [pool, drawState, settings.spinDurationMs, settings.autoConfetti, history, displayNumber]);
+  }, [pool, drawState, settings.spinDurationMs, settings.autoConfetti, history]);
 
   // Clean up timers
   useEffect(() => {
