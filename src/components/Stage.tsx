@@ -240,34 +240,34 @@ export const Stage: React.FC<StageProps> = ({
       <div className="mt-5 flex items-center space-x-2 text-xs text-gray-600 bg-white/80 border-2 border-gray-200 px-4 py-2 rounded-full shadow-sm">
         <span className="font-bold text-gray-700">จังหวะการลุ้น:</span>
         <button
-          onClick={() => onChangeDuration(2000)}
-          className={`px-3 py-1 rounded-xl transition-all font-bold ${
-            spinDurationMs === 2000
-              ? 'bg-[#FF8E53] text-white shadow-sm'
-              : 'bg-gray-100 text-gray-600 hover:text-black border border-gray-200'
-          }`}
-        >
-          ⚡ เร็ว (2s)
-        </button>
-        <button
-          onClick={() => onChangeDuration(3500)}
-          className={`px-3 py-1 rounded-xl transition-all font-bold ${
-            spinDurationMs === 3500
-              ? 'bg-[#FF8E53] text-white shadow-sm'
-              : 'bg-gray-100 text-gray-600 hover:text-black border border-gray-200'
-          }`}
-        >
-          ⏱️ มาตรฐาน (3.5s)
-        </button>
-        <button
           onClick={() => onChangeDuration(5000)}
           className={`px-3 py-1 rounded-xl transition-all font-bold ${
-            spinDurationMs === 5000
+            spinDurationMs <= 5500
               ? 'bg-[#FF8E53] text-white shadow-sm'
               : 'bg-gray-100 text-gray-600 hover:text-black border border-gray-200'
           }`}
         >
-          🔥 ลุ้นระทึก (5s)
+          ⚡ เร็ว (5s)
+        </button>
+        <button
+          onClick={() => onChangeDuration(7000)}
+          className={`px-3 py-1 rounded-xl transition-all font-bold ${
+            spinDurationMs > 5500 && spinDurationMs <= 7500
+              ? 'bg-[#FF8E53] text-white shadow-sm'
+              : 'bg-gray-100 text-gray-600 hover:text-black border border-gray-200'
+          }`}
+        >
+          ⏱️ มาตรฐาน (7s)
+        </button>
+        <button
+          onClick={() => onChangeDuration(9000)}
+          className={`px-3 py-1 rounded-xl transition-all font-bold ${
+            spinDurationMs > 7500
+              ? 'bg-[#FF8E53] text-white shadow-sm'
+              : 'bg-gray-100 text-gray-600 hover:text-black border border-gray-200'
+          }`}
+        >
+          🔥 ลุ้นระทึก (9s)
         </button>
       </div>
     </div>

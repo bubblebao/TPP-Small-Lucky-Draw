@@ -64,38 +64,48 @@ export function App() {
     return () => document.removeEventListener('fullscreenchange', onFullscreenChange);
   }, []);
 
-  // Main Spin Handler with Precision Timing (2s / 3.5s / 5s) & Sequential Deceleration
+  // Main Spin Handler with Full 205-Number Cycle & Approaching Deceleration (5s / 7s / 9s)
   const handleSpin = useCallback(() => {
     if (pool.length === 0 || drawState === 'SPINNING') return;
 
     // 1. Sort pool ascending to ensure strict sequential order
     const sortedPool = [...pool].sort((a, b) => a - b);
+    const poolLen = sortedPool.length;
 
     // 2. Determine winner securely using CSPRNG
     const { picked: winnerNumber, entropyHex } = drawFromPool(sortedPool);
     const targetIndex = sortedPool.indexOf(winnerNumber);
-    const poolLen = sortedPool.length;
 
-    // 3. Calibrate steps and deceleration based strictly on the selected duration (2s, 3.5s, 5s)
-    let totalSteps = 45;
-    let decelStepsCount = 12;
-
-    if (settings.spinDurationMs <= 2200) {
-      // ⚡ Fast (2s)
-      totalSteps = Math.min(30, poolLen > 1 ? 30 : 1);
-      decelStepsCount = Math.min(9, totalSteps - 1);
-    } else if (settings.spinDurationMs >= 4500) {
-      // 🔥 Suspense (5s)
-      totalSteps = Math.min(65, poolLen > 1 ? 65 : 1);
-      decelStepsCount = Math.min(15, totalSteps - 1);
+    // 3. Determine start index (from current number or 0)
+    let startIndex = 0;
+    if (displayNumber !== null && sortedPool.includes(displayNumber)) {
+      startIndex = sortedPool.indexOf(displayNumber);
     } else {
-      // ⏱️ Standard (3.5s)
-      totalSteps = Math.min(45, poolLen > 1 ? 45 : 1);
-      decelStepsCount = Math.min(12, totalSteps - 1);
+      startIndex = 0;
     }
 
-    // 4. Calculate startIndex so that walking sequentially for totalSteps lands EXACTLY on targetIndex!
-    const startIndex = (targetIndex - (totalSteps % poolLen) + poolLen) % poolLen;
+    // 4. Full Cycle Guarantee: Must cycle through ALL numbers in the pool at least once!
+    const duration = settings.spinDurationMs; // 5000, 7000, 9000
+    let minLaps = 1;
+
+    if (duration >= 8500) {
+      // 🔥 9s: 3 full cycles
+      minLaps = poolLen >= 150 ? 2 : 3;
+    } else if (duration >= 6500) {
+      // ⏱️ 7s: 2 full cycles
+      minLaps = poolLen >= 150 ? 2 : 2;
+    } else {
+      // ⚡ 5s: 1 full cycle
+      minLaps = 1;
+    }
+
+    const distance = (targetIndex - startIndex + poolLen) % poolLen;
+    const totalSteps = minLaps * poolLen + distance;
+
+    const decelStepsCount = Math.min(16, Math.max(8, Math.floor(totalSteps * 0.15)));
+    const decelDurationTarget = duration >= 8000 ? 2600 : duration >= 6500 ? 2200 : 1800;
+    const fastStepsCount = Math.max(1, totalSteps - decelStepsCount);
+    const fastDelay = Math.max(9, Math.floor((duration - decelDurationTarget) / fastStepsCount));
 
     setDrawState('SPINNING');
 
@@ -108,15 +118,16 @@ export function App() {
 
       const remainingSteps = totalSteps - currentStep;
 
-      // Pitch modulates slightly as it approaches winner to build suspense
-      if (remainingSteps <= 8) {
-        soundFx.playTick(1.0 + (8 - remainingSteps) * 0.12);
-      } else {
-        soundFx.playTick(1.0);
+      // Sound FX: Smooth wheel ticker during fast spin, individual ticks during deceleration
+      if (remainingSteps <= decelStepsCount) {
+        soundFx.playTick(1.0 + (decelStepsCount - remainingSteps) * 0.08);
+      } else if (currentStep % 4 === 0) {
+        // Play click every 4th number during high-speed cycle for smooth audio
+        soundFx.playTick(0.9);
       }
 
       if (currentStep >= totalSteps) {
-        // Reached the winner exactly in sequential order on target time!
+        // Reached the winner in full sequential cycle on target time!
         setDisplayNumber(winnerNumber);
         setLastEntropyHex(entropyHex);
         setDrawState('WINNER');
@@ -146,21 +157,13 @@ export function App() {
         return;
       }
 
-      // Smooth deceleration curve calibrated to match the chosen duration
-      let delay = 32;
+      // Deceleration curve for the final stretch
+      let delay = fastDelay;
 
       if (remainingSteps <= decelStepsCount) {
         const factor = (decelStepsCount + 1 - remainingSteps) / decelStepsCount; // 0.1 to 1.0
-        if (settings.spinDurationMs <= 2200) {
-          // Fast 2s curve: max delay ~380ms
-          delay = Math.round(35 + Math.pow(factor, 2.4) * 350);
-        } else if (settings.spinDurationMs >= 4500) {
-          // Suspense 5s curve: max delay ~580ms
-          delay = Math.round(40 + Math.pow(factor, 2.6) * 550);
-        } else {
-          // Standard 3.5s curve: max delay ~450ms
-          delay = Math.round(38 + Math.pow(factor, 2.5) * 420);
-        }
+        const maxDecelDelay = duration >= 8000 ? 620 : duration >= 6500 ? 520 : 420;
+        delay = Math.round(fastDelay + Math.pow(factor, 2.5) * (maxDecelDelay - fastDelay));
       }
 
       currentStep++;
@@ -168,7 +171,7 @@ export function App() {
     };
 
     executeNextStep();
-  }, [pool, drawState, settings.spinDurationMs, settings.autoConfetti, history]);
+  }, [pool, drawState, settings.spinDurationMs, settings.autoConfetti, history, displayNumber]);
 
   // Clean up timers
   useEffect(() => {

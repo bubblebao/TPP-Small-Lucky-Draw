@@ -8,7 +8,7 @@ export const DEFAULT_TOTAL_NUMBERS = 205;
 
 export const DEFAULT_SETTINGS: LuckyDrawSettings = {
   totalNumbers: DEFAULT_TOTAL_NUMBERS,
-  spinDurationMs: 3500,
+  spinDurationMs: 5000,
   soundEnabled: true,
   autoConfetti: true,
 };

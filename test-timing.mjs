@@ -1,31 +1,39 @@
-function testCalibratedTimingMath() {
-  const testPoolSizes = [205, 180, 50, 15, 5, 2, 1];
-  const durations = [2000, 3500, 5000];
+function testFullLoopMath() {
+  const testPoolSizes = [205, 180, 100, 50, 15, 5, 2, 1];
+  const durations = [5000, 7000, 9000];
 
   for (const poolLen of testPoolSizes) {
     for (const duration of durations) {
-      let totalSteps = 45;
-      if (duration <= 2200) {
-        totalSteps = Math.min(30, poolLen > 1 ? 30 : 1);
-      } else if (duration >= 4500) {
-        totalSteps = Math.min(65, poolLen > 1 ? 65 : 1);
+      let minLaps = 1;
+      if (duration >= 8500) {
+        minLaps = poolLen >= 150 ? 2 : 3;
+      } else if (duration >= 6500) {
+        minLaps = poolLen >= 150 ? 2 : 2;
       } else {
-        totalSteps = Math.min(45, poolLen > 1 ? 45 : 1);
+        minLaps = 1;
       }
 
-      for (let targetIndex = 0; targetIndex < poolLen; targetIndex++) {
-        const startIndex = (targetIndex - (totalSteps % poolLen) + poolLen) % poolLen;
-        const finalIndex = (startIndex + totalSteps) % poolLen;
+      for (let startIndex = 0; startIndex < poolLen; startIndex++) {
+        for (let targetIndex = 0; targetIndex < poolLen; targetIndex++) {
+          const distance = (targetIndex - startIndex + poolLen) % poolLen;
+          const totalSteps = minLaps * poolLen + distance;
 
-        if (finalIndex !== targetIndex) {
-          throw new Error(`Failed: poolLen=${poolLen}, target=${targetIndex}, final=${finalIndex}`);
+          // 1. Must do at least 1 full loop
+          if (poolLen > 1 && totalSteps < poolLen) {
+            throw new Error(`Did not complete full loop! totalSteps=${totalSteps}, poolLen=${poolLen}`);
+          }
+
+          // 2. Final step must land exactly on targetIndex
+          const finalIndex = (startIndex + totalSteps) % poolLen;
+          if (finalIndex !== targetIndex) {
+            throw new Error(`Target mismatch! start=${startIndex}, target=${targetIndex}, final=${finalIndex}`);
+          }
         }
       }
     }
   }
 
-  console.log('✅ Calibrated Timing & Step Math: 100% PASS for all durations (2s, 3.5s, 5s) and all pool sizes!');
+  console.log('✅ Full 205-Number Cycle Math: 100% PASS! Every number in pool is visited at least 1 full time, and final step lands exactly on target!');
 }
 
-testCalibratedTimingMath();
-
+testFullLoopMath();
