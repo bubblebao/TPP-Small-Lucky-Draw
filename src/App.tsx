@@ -64,27 +64,55 @@ export function App() {
     return () => document.removeEventListener('fullscreenchange', onFullscreenChange);
   }, []);
 
-  // Main Spin Handler
+  // Main Spin Handler with Strict Sequential Roll & Approaching Deceleration
   const handleSpin = useCallback(() => {
     if (pool.length === 0 || drawState === 'SPINNING') return;
 
-    // 1. Determine winner securely using CSPRNG
-    const { picked: winnerNumber, entropyHex } = drawFromPool(pool);
+    // 1. Sort pool ascending to ensure strict sequential order
+    const sortedPool = [...pool].sort((a, b) => a - b);
+
+    // 2. Determine winner securely using CSPRNG
+    const { picked: winnerNumber, entropyHex } = drawFromPool(sortedPool);
+    const targetIndex = sortedPool.indexOf(winnerNumber);
+
+    // 3. Determine start index
+    let startIndex = 0;
+    if (displayNumber !== null && sortedPool.includes(displayNumber)) {
+      startIndex = sortedPool.indexOf(displayNumber);
+    } else {
+      startIndex = Math.floor(Math.random() * sortedPool.length);
+    }
+
+    // 4. Calculate total sequential steps to land exactly on winnerNumber
+    const duration = settings.spinDurationMs;
+    const poolLen = sortedPool.length;
+    const distance = (targetIndex - startIndex + poolLen) % poolLen;
+
+    // Ensure enough full laps so it feels like a real rolling wheel
+    const minSteps = Math.max(30, Math.floor(duration / 55));
+    const laps = Math.max(1, Math.ceil((minSteps - distance) / poolLen));
+    const totalSteps = laps * poolLen + distance;
 
     setDrawState('SPINNING');
 
-    const duration = settings.spinDurationMs;
-    const startTime = Date.now();
+    let currentStep = 0;
 
-    // 2. Rolling animation sequence
-    let currentSpeed = 45; // starts fast (ms per tick)
+    const executeNextStep = () => {
+      const stepIndex = (startIndex + currentStep) % poolLen;
+      const currentNumber = sortedPool[stepIndex];
+      setDisplayNumber(currentNumber);
 
-    const runRollingTick = () => {
-      const elapsed = Date.now() - startTime;
-      const progress = elapsed / duration;
+      const remainingSteps = totalSteps - currentStep;
 
-      if (elapsed >= duration) {
-        // Grand Reveal
+      // Play tick sound (pitch rises slightly as it slows down to build suspense)
+      if (remainingSteps <= 10) {
+        soundFx.playTick(1.0 + (10 - remainingSteps) * 0.1);
+      } else {
+        soundFx.playTick(1.0);
+      }
+
+      if (currentStep >= totalSteps) {
+        // Reached the winner exactly in sequential order!
         setDisplayNumber(winnerNumber);
         setLastEntropyHex(entropyHex);
         setDrawState('WINNER');
@@ -106,7 +134,7 @@ export function App() {
         setHistory(newHistory);
         saveHistory(newHistory);
 
-        // Sound & Confetti
+        // Winner celebration
         soundFx.playWinnerFanfare();
         if (settings.autoConfetti) {
           fireCelebrationConfetti();
@@ -114,23 +142,24 @@ export function App() {
         return;
       }
 
-      // Sample a random number from current pool to flash on screen
-      const sampleIndex = Math.floor(Math.random() * pool.length);
-      setDisplayNumber(pool[sampleIndex]);
-      soundFx.playTick(1.0 + progress * 0.4);
+      // Calculate delay with realistic deceleration curve in the final stretch
+      let delay = 35; // baseline high speed
 
-      // Decelerate smoothly as it approaches the end (ease-out)
-      if (progress > 0.75) {
-        currentSpeed = Math.floor(60 + Math.pow(progress, 3.5) * 380);
-      } else if (progress > 0.45) {
-        currentSpeed = 80;
+      if (remainingSteps <= 12) {
+        // Exponential deceleration right before reaching the winner
+        // 12 -> 50ms, 8 -> 95ms, 4 -> 210ms, 2 -> 390ms, 1 -> 580ms
+        const factor = (13 - remainingSteps) / 12; // 0.08 to 1.0
+        delay = Math.round(45 + Math.pow(factor, 2.8) * 550);
+      } else if (remainingSteps <= 25) {
+        delay = 45;
       }
 
-      spinTimerRef.current = setTimeout(runRollingTick, currentSpeed);
+      currentStep++;
+      spinTimerRef.current = setTimeout(executeNextStep, delay);
     };
 
-    runRollingTick();
-  }, [pool, drawState, settings.spinDurationMs, settings.autoConfetti, history]);
+    executeNextStep();
+  }, [pool, drawState, settings.spinDurationMs, settings.autoConfetti, history, displayNumber]);
 
   // Clean up timers
   useEffect(() => {

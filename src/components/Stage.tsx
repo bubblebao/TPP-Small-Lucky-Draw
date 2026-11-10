@@ -115,9 +115,9 @@ export const Stage: React.FC<StageProps> = ({
                 <Sparkles size={18} className="text-[#FF8E53]" />
               </div>
             ) : isSpinning ? (
-              <span className="text-sm text-[#3D5A80] font-bold animate-pulse flex items-center gap-2">
+              <span className="text-sm text-[#E07A5F] font-black animate-pulse flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-[#FF6B8B] animate-ping"></span>
-                กำลังสุ่มหมายเลขจาก {remainingCount} สิทธิ์ที่เหลือ...
+                กำลังวิ่งหมุนเรียงลำดับ 1–{totalCount} อย่างโปร่งใส... กำลังชะลอเข้าสู่เลขผู้โชคดี!
               </span>
             ) : (
               <span className="text-xs sm:text-sm text-gray-500 font-semibold tracking-wide">
