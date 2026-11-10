@@ -312,7 +312,7 @@ export function App() {
   const drawnNumberList = history.map((h) => h.number);
 
   return (
-    <div className="pastel-party-bg text-[#2D3748] min-h-screen lg:h-screen lg:max-h-screen flex flex-col justify-between overflow-x-hidden lg:overflow-hidden relative selection:bg-[#FFD166] selection:text-[#2D3748]">
+    <div className="pastel-party-bg text-[#2D3748] min-h-screen flex flex-col justify-between relative selection:bg-[#FFD166] selection:text-[#2D3748]">
       {/* Ambient Floating Pastel Party Confetti Shapes */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
         <div className="absolute top-1/4 left-10 w-4 h-4 rounded-full bg-[#FFCAD4] animate-confetti-1" />
@@ -322,7 +322,7 @@ export function App() {
         <div className="absolute top-12 left-1/2 w-4 h-4 rounded-lg rotate-12 bg-[#D8B4E2] animate-confetti-1" />
       </div>
 
-      <div className="relative z-10 flex flex-col flex-1 min-h-0 justify-between">
+      <div className="relative z-10">
         {/* Header */}
         <Header
           soundEnabled={settings.soundEnabled}
@@ -341,11 +341,11 @@ export function App() {
           totalCount={settings.totalNumbers}
         />
 
-        {/* Main 2-Column Split-Screen Dashboard Layout (Fits in 100% viewport) */}
-        <main className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-2 flex-1 min-h-0 flex items-center">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 w-full items-center">
-            {/* Left Column: Stage & Action Controls (7 cols on lg, 8 cols on xl) */}
-            <div className="lg:col-span-7 xl:col-span-8 flex flex-col items-center justify-center">
+        {/* Main 2-Column Split-Screen Dashboard Layout (Balanced & Equal-Height) */}
+        <main className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-5">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+            {/* Left Column: Stage & Integrated Controls (7 cols on lg) */}
+            <div className="lg:col-span-7 flex flex-col">
               <Stage
                 drawState={drawState}
                 displayNumber={displayNumber}
@@ -365,31 +365,31 @@ export function App() {
               />
             </div>
 
-            {/* Right Column: History Log at Eye Level! (5 cols on lg, 4 cols on xl) */}
-            <div className="lg:col-span-5 xl:col-span-4 flex flex-col justify-center">
+            {/* Right Column: History Log at Eye Level with Matching Height (5 cols on lg) */}
+            <div className="lg:col-span-5 flex flex-col">
               <HistoryLog history={history} onRestoreNumber={handleRestoreSpecific} />
             </div>
           </div>
         </main>
-
-        {/* Footer Branding (Compact & Clean) */}
-        <footer className="w-full py-2.5 px-4 border-t-2 border-[#E2EDF0] bg-white/80 backdrop-blur-md text-center text-xs text-gray-500 relative z-10 shrink-0">
-          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
-            <div className="flex items-center space-x-2 font-bold text-gray-700 text-xs">
-              <span className="tracking-wider text-[#44595B]">THE PAVILIONS PHUKET</span>
-              <span className="text-gray-300">•</span>
-              <span className="text-[#698A9A]">Hotels & Resorts</span>
-            </div>
-            <div className="flex items-center space-x-3 text-[11px] text-gray-500 font-medium">
-              <span>Offline LocalStorage Ready</span>
-              <span>•</span>
-              <span className="text-emerald-700 font-bold">100% Client-Side Safe</span>
-              <span>•</span>
-              <span className="text-[#E07A5F] font-bold">Ready for Netlify</span>
-            </div>
-          </div>
-        </footer>
       </div>
+
+      {/* Footer Branding */}
+      <footer className="w-full py-5 px-4 border-t-2 border-[#E2EDF0] bg-white/80 backdrop-blur-md text-center text-xs text-gray-500 relative z-10">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div className="flex items-center space-x-2 font-bold text-gray-700">
+            <span className="tracking-wider text-[#44595B]">THE PAVILIONS PHUKET</span>
+            <span className="text-gray-300">•</span>
+            <span className="text-[#698A9A]">Hotels & Resorts</span>
+          </div>
+          <div className="flex items-center space-x-3 text-[11px] text-gray-500 font-medium">
+            <span>Offline LocalStorage Ready</span>
+            <span>•</span>
+            <span className="text-emerald-700 font-bold">100% Client-Side Safe</span>
+            <span>•</span>
+            <span className="text-[#E07A5F] font-bold">Ready for Netlify</span>
+          </div>
+        </div>
+      </footer>
 
       {/* Modals */}
       <NumberMatrixModal

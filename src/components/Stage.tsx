@@ -58,209 +58,214 @@ export const Stage: React.FC<StageProps> = ({
   const progressPercentage = Math.round(((totalCount - remainingCount) / totalCount) * 100);
 
   return (
-    <div className="w-full flex flex-col items-center justify-center p-0 relative">
-      {/* Top Event Greeting Badge */}
-      <div className="flex items-center justify-center mb-2.5">
-        <div className="flex items-center space-x-2 bg-white/95 border-2 border-[#FFCAD4] px-4 py-1 rounded-full text-xs text-[#44595B] shadow-sm font-bold">
-          <Sparkles size={14} className="text-[#FF8E53]" />
-          <span>ขอให้ทุกคนโชคดี ได้รับของขวัญถูกใจในงาน Small Lucky Draw นะคะ</span>
-          <Gift size={14} className="text-[#FF8E53]" />
+    <div className="w-full flex flex-col items-center justify-start h-full">
+      {/* Top Cheerful Party Blessing Badge (Replaced defensive badge) */}
+      <div className="mb-4 flex items-center justify-center">
+        <div className="flex items-center space-x-2 bg-gradient-to-r from-[#FFF5EB] via-white to-[#FFE5EC] border-2 border-[#FFCAD4] px-5 py-1.5 rounded-full shadow-sm">
+          <Sparkles size={16} className="text-[#FF8E53] animate-spin-slow" />
+          <span className="text-xs sm:text-sm font-black text-[#D9381E] tracking-wide">
+            ✨ ขอให้ทุกคนโชคดีในการจับรางวัลนะคะ ✨
+          </span>
+          <Sparkles size={16} className="text-[#FF8E53] animate-spin-slow" />
         </div>
       </div>
 
-      {/* Main Bright Showcase Frame */}
-      <div className="relative w-full max-w-xl">
-        {/* Colorful Glow Aura behind card */}
+      {/* Main Integrated Showcase Card */}
+      <div className="relative w-full flex-1 flex flex-col">
+        {/* Glow Aura behind card */}
         <div
-          className={`absolute -inset-1.5 rounded-[32px] blur-xl transition-all duration-700 pointer-events-none ${
+          className={`absolute -inset-1.5 rounded-[36px] blur-xl transition-all duration-700 pointer-events-none ${
             isWinner
-              ? 'bg-gradient-to-r from-pink-300 via-amber-300 to-yellow-300 opacity-70'
+              ? 'bg-gradient-to-r from-pink-300 via-amber-300 to-yellow-300 opacity-60'
               : isSpinning
-              ? 'bg-gradient-to-r from-cyan-200 via-teal-200 to-pink-200 opacity-60 animate-pulse'
-              : 'bg-gradient-to-r from-blue-100 via-pink-100 to-yellow-100 opacity-50'
+              ? 'bg-gradient-to-r from-cyan-200 via-teal-200 to-pink-200 opacity-50 animate-pulse'
+              : 'bg-gradient-to-r from-blue-100 via-pink-100 to-yellow-100 opacity-40'
           }`}
         />
 
-        {/* 3D Showcase Card */}
+        {/* Unified Card Container */}
         <div
-          className={`relative rounded-[28px] p-4 sm:p-6 flex flex-col items-center justify-center transition-all duration-300 ${
+          className={`relative rounded-[32px] p-6 sm:p-7 flex flex-col justify-between flex-1 transition-all duration-300 ${
             isWinner ? 'pastel-card-winner' : 'pastel-card'
           }`}
         >
-          {/* Top Party Ribbon */}
-          <div className="flex items-center space-x-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-[#FFE5EC] via-[#FFF0F5] to-[#E2EDF0] border-2 border-[#FFCAD4] shadow-sm mb-2.5">
-            <PartyPopper size={14} className="text-[#FF6B8B]" />
-            <span className="text-[11px] sm:text-xs uppercase tracking-[0.18em] text-[#44595B] font-extrabold">
-              THE PAVILIONS PHUKET • SMALL LUCKY DRAW
-            </span>
-            <Gift size={14} className="text-[#FF8E53]" />
-          </div>
+          {/* Card Top: Ribbon & Status */}
+          <div className="flex flex-col items-center">
+            {/* Party Ribbon */}
+            <div className="flex items-center space-x-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-[#FFE5EC] via-[#FFF0F5] to-[#E2EDF0] border-2 border-[#FFCAD4] shadow-sm mb-3">
+              <PartyPopper size={15} className="text-[#FF6B8B]" />
+              <span className="text-xs uppercase tracking-[0.2em] text-[#44595B] font-extrabold">
+                THE PAVILIONS PHUKET • SMALL LUCKY DRAW
+              </span>
+              <Gift size={15} className="text-[#FF8E53]" />
+            </div>
 
-          {/* Winner Celebration Message */}
-          <div className="h-7 flex items-center justify-center mb-2">
-            {isWinner ? (
-              <div className="flex items-center space-x-2 bg-gradient-to-r from-pink-500/10 via-amber-400/20 to-pink-500/10 border-2 border-[#FFD166] px-4 py-1 rounded-full animate-bounce shadow-sm">
-                <Sparkles size={16} className="text-[#FF8E53]" />
-                <span className="text-xs sm:text-sm font-black text-[#D9381E] tracking-wide">
-                  🎉 ยินดีด้วยนะคะ! หมายเลขผู้โชคดี 🎉
+            {/* Status Message */}
+            <div className="h-8 flex items-center justify-center">
+              {isWinner ? (
+                <div className="flex items-center space-x-2 bg-gradient-to-r from-pink-500/10 via-amber-400/20 to-pink-500/10 border-2 border-[#FFD166] px-4 py-1 rounded-full animate-bounce shadow-sm">
+                  <Sparkles size={16} className="text-[#FF8E53]" />
+                  <span className="text-xs sm:text-sm font-black text-[#D9381E] tracking-wide">
+                    🎉 ยินดีด้วยนะคะ! หมายเลขผู้โชคดี 🎉
+                  </span>
+                  <Sparkles size={16} className="text-[#FF8E53]" />
+                </div>
+              ) : isSpinning ? (
+                <span className="text-xs sm:text-sm text-[#E07A5F] font-black animate-pulse flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-[#FF6B8B] animate-ping"></span>
+                  กำลังหมุนเรียงลำดับ... กำลังชะลอแตะเบรกเข้าสู่เลขรางวัล!
                 </span>
-                <Sparkles size={16} className="text-[#FF8E53]" />
-              </div>
-            ) : isSpinning ? (
-              <span className="text-xs sm:text-sm text-[#E07A5F] font-black animate-pulse flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-[#FF6B8B] animate-ping"></span>
-                กำลังวิ่งหมุนเรียงลำดับ 1–{totalCount}... กำลังชะลอเข้าสู่เลขผู้โชคดี!
-              </span>
-            ) : (
-              <span className="text-xs text-gray-500 font-semibold tracking-wide">
-                กดปุ่มสีส้ม "สุ่มรางวัล" หรือเคาะ Spacebar บนคีย์บอร์ดเพื่อลุ้นเลข
-              </span>
-            )}
-          </div>
+              ) : (
+                <span className="text-xs text-gray-500 font-semibold tracking-wide">
+                  กดปุ่มสีส้ม "สุ่มรางวัล" หรือเคาะ Spacebar บนคีย์บอร์ด
+                </span>
+              )}
+            </div>
 
-          {/* 3D Individual Slot Drum Reels */}
-          <div className="relative my-2 flex items-center justify-center gap-2.5 sm:gap-4">
-            {digits.map((digit, index) => (
-              <div
-                key={index}
-                className={`pastel-digit-drum w-20 h-28 sm:w-24 sm:h-34 lg:w-28 lg:h-38 rounded-2xl flex items-center justify-center transition-all ${
-                  isWinner
-                    ? 'border-[#FFD166] shadow-[0_10px_25px_rgba(255,209,102,0.4)]'
-                    : isSpinning
-                    ? 'border-cyan-300 shadow-[0_8px_20px_rgba(168,218,220,0.4)]'
-                    : 'border-gray-200'
-                }`}
-              >
-                {/* Horizontal Center Reel Alignment Guide Line */}
-                <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-12 sm:h-16 bg-gradient-to-r from-transparent via-[#E2EDF0]/50 to-transparent pointer-events-none" />
-
-                {/* Digit Display */}
-                <span
-                  className={`font-mono font-black text-5xl sm:text-6xl lg:text-7xl select-none z-10 transition-all ${
+            {/* 3D Slot Drums */}
+            <div className="relative my-3 flex items-center justify-center gap-3 sm:gap-5">
+              {digits.map((digit, index) => (
+                <div
+                  key={index}
+                  className={`pastel-digit-drum w-24 h-36 sm:w-28 sm:h-44 rounded-2xl sm:rounded-3xl flex items-center justify-center transition-all ${
                     isWinner
-                      ? 'party-gradient-winner scale-105 drop-shadow-[0_6px_12px_rgba(255,107,139,0.3)]'
+                      ? 'border-[#FFD166] shadow-[0_12px_25px_rgba(255,209,102,0.4)]'
                       : isSpinning
-                      ? 'text-[#698A9A] animate-slot-blur-light opacity-90'
-                      : 'text-[#1E293B] drop-shadow-sm'
+                      ? 'border-cyan-300 shadow-[0_8px_20px_rgba(168,218,220,0.4)]'
+                      : 'border-gray-200'
                   }`}
                 >
-                  {digit}
-                </span>
-              </div>
-            ))}
-          </div>
-
-          {/* Subtext info */}
-          <div className="mt-2 text-center h-6 flex items-center justify-center">
-            {isCompleted ? (
-              <span className="text-xs sm:text-sm font-extrabold text-rose-600 bg-rose-50 border-2 border-rose-200 px-3 py-1 rounded-full">
-                การจับรางวัลเสร็จสิ้นครบทั้ง 205 รายการแล้วค่ะ
-              </span>
-            ) : isWinner ? (
-              <span className="text-[11px] sm:text-xs font-bold text-emerald-800 bg-emerald-50 border-2 border-emerald-200 px-3 py-0.5 rounded-full shadow-sm">
-                ✓ ตัดออกจากโถสุ่มเรียบร้อย • พร้อมสุ่มรอบถัดไป
-              </span>
-            ) : null}
-          </div>
-
-          {/* Progress Bar Container */}
-          <div className="w-full mt-3 pt-2.5 border-t-2 border-gray-100">
-            <div className="flex justify-between items-center text-[11px] text-gray-600 mb-1.5 font-bold">
-              <span className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-[#FF8E53]"></span>
-                จับไปแล้ว <strong className="text-[#2C3E50]">{totalCount - remainingCount}</strong> จาก {totalCount} รางวัล
-              </span>
-              <span className="text-[#E07A5F] font-mono font-black">{progressPercentage}%</span>
+                  <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-14 bg-gradient-to-r from-transparent via-[#E2EDF0]/50 to-transparent pointer-events-none" />
+                  <span
+                    className={`font-mono font-black text-6xl sm:text-7xl select-none z-10 transition-all ${
+                      isWinner
+                        ? 'party-gradient-winner scale-110 drop-shadow-[0_6px_12px_rgba(255,107,139,0.3)]'
+                        : isSpinning
+                        ? 'text-[#698A9A] animate-slot-blur-light opacity-90'
+                        : 'text-[#1E293B] drop-shadow-sm'
+                    }`}
+                  >
+                    {digit}
+                  </span>
+                </div>
+              ))}
             </div>
-            <div className="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden p-0.5 border border-gray-200 shadow-inner">
-              <div
-                className="h-full rounded-full bg-gradient-to-r from-[#A8DADC] via-[#FFD166] to-[#FF6B8B] transition-all duration-500 shadow-sm"
-                style={{ width: `${progressPercentage}%` }}
-              />
+
+            {/* Winner Badge or Empty Info */}
+            <div className="h-6 flex items-center justify-center">
+              {isCompleted ? (
+                <span className="text-xs font-black text-rose-600 bg-rose-50 border-2 border-rose-200 px-3 py-0.5 rounded-full">
+                  จับรางวัลเสร็จสิ้นครบทั้ง 205 รายการแล้วค่ะ
+                </span>
+              ) : isWinner ? (
+                <span className="text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-3 py-0.5 rounded-full">
+                  ✓ ตัดออกจากโถสุ่มเรียบร้อย • พร้อมสุ่มรอบถัดไป
+                </span>
+              ) : null}
+            </div>
+
+            {/* Progress Bar */}
+            <div className="w-full mt-3 pt-3 border-t-2 border-gray-100">
+              <div className="flex justify-between items-center text-xs text-gray-600 mb-1.5 font-bold">
+                <span className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-[#FF8E53]"></span>
+                  จับไปแล้ว <strong className="text-[#2C3E50]">{totalCount - remainingCount}</strong> จาก {totalCount} รางวัล
+                </span>
+                <span className="text-[#E07A5F] font-mono font-black">{progressPercentage}%</span>
+              </div>
+              <div className="w-full h-3 bg-gray-100 rounded-full overflow-hidden p-0.5 border border-gray-200 shadow-inner">
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-[#A8DADC] via-[#FFD166] to-[#FF6B8B] transition-all duration-500 shadow-sm"
+                  style={{ width: `${progressPercentage}%` }}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Integrated Action Controls at Bottom of Card */}
+          <div className="mt-5 pt-4 border-t-2 border-gray-100 flex flex-col gap-3">
+            {/* Buttons Row */}
+            <div className="flex items-center justify-center gap-3 w-full">
+              {/* Undo Button */}
+              <button
+                onClick={onUndo}
+                disabled={!canUndo || isSpinning}
+                title="กดย้อนกลับกรณีเผลอกดผิด หรือต้องการคืนเลขล่าสุดเข้าโถสุ่ม"
+                className={`px-4 py-3.5 rounded-2xl flex items-center justify-center space-x-1.5 font-bold text-xs sm:text-sm transition-all border-2 shadow-sm shrink-0 ${
+                  canUndo && !isSpinning
+                    ? 'bg-[#FFF0F3] hover:bg-[#FFE5EC] text-[#E05780] border-[#FFCAD4] hover:border-[#FF8FA3] active:scale-95'
+                    : 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed opacity-50'
+                }`}
+              >
+                <RotateCcw size={16} />
+                <span>ย้อนกลับ</span>
+              </button>
+
+              {/* Giant Party Spin Button */}
+              <button
+                onClick={onSpin}
+                disabled={isSpinning || isCompleted}
+                className={`flex-1 py-3.5 px-6 rounded-2xl font-black text-lg sm:text-xl flex items-center justify-center space-x-2.5 transition-all ${
+                  isSpinning || isCompleted
+                    ? 'bg-gray-200 text-gray-400 border-2 border-gray-300 cursor-not-allowed'
+                    : 'party-btn-spin'
+                }`}
+              >
+                <Play size={22} className={isSpinning ? 'animate-spin' : 'fill-current'} />
+                <span>{isSpinning ? 'กำลังสุ่ม...' : isCompleted ? 'ครบทุกรางวัลแล้ว' : 'สุ่มรางวัล (SPIN)'}</span>
+                <span className="hidden sm:inline-block text-[10px] bg-white/30 text-white font-mono font-black px-2 py-0.5 rounded-md shadow-sm">
+                  Spacebar
+                </span>
+              </button>
+
+              {/* Number Matrix Button */}
+              <button
+                onClick={onOpenMatrix}
+                disabled={isSpinning}
+                title="เปิดดูเลข 1-205 ทั้งหมด หรือคลิกคืนเลขเข้าโถได้ด้วยตนเอง"
+                className="px-4 py-3.5 rounded-2xl bg-[#E8F8F5] hover:bg-[#D1F2EB] text-[#117A65] border-2 border-[#A3E4D7] font-bold text-xs sm:text-sm flex items-center justify-center space-x-1.5 transition-all active:scale-95 shadow-sm shrink-0"
+              >
+                <SlidersHorizontal size={16} />
+                <span>ผังเลข</span>
+              </button>
+            </div>
+
+            {/* Speed Controller Pills inside the card */}
+            <div className="flex items-center justify-center space-x-2 text-xs text-gray-600 bg-gray-50 border border-gray-200 py-1.5 px-3 rounded-full shadow-inner">
+              <span className="font-bold text-gray-600 text-[11px]">จังหวะ:</span>
+              <button
+                onClick={() => onChangeDuration(3000)}
+                className={`px-3 py-1 rounded-xl transition-all font-bold text-[11px] ${
+                  spinDurationMs <= 3500
+                    ? 'bg-[#FF8E53] text-white shadow-sm'
+                    : 'bg-white text-gray-600 hover:text-black border border-gray-200'
+                }`}
+              >
+                ⚡ เร็ว (3s)
+              </button>
+              <button
+                onClick={() => onChangeDuration(5000)}
+                className={`px-3 py-1 rounded-xl transition-all font-bold text-[11px] ${
+                  spinDurationMs > 3500 && spinDurationMs <= 5500
+                    ? 'bg-[#FF8E53] text-white shadow-sm'
+                    : 'bg-white text-gray-600 hover:text-black border border-gray-200'
+                }`}
+              >
+                ⏱️ มาตรฐาน (5s)
+              </button>
+              <button
+                onClick={() => onChangeDuration(7000)}
+                className={`px-3 py-1 rounded-xl transition-all font-bold text-[11px] ${
+                  spinDurationMs > 5500
+                    ? 'bg-[#FF8E53] text-white shadow-sm'
+                    : 'bg-white text-gray-600 hover:text-black border border-gray-200'
+                }`}
+              >
+                🔥 ลุ้นระทึก (7s)
+              </button>
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Main Interactive Action Controls */}
-      <div className="mt-3.5 sm:mt-4 flex flex-row items-center justify-center gap-3 w-full max-w-xl">
-        {/* Undo Button */}
-        <button
-          onClick={onUndo}
-          disabled={!canUndo || isSpinning}
-          title="กดย้อนกลับกรณีเผลอกดผิด หรือต้องการคืนเลขล่าสุดเข้าโถสุ่ม"
-          className={`px-4 py-3 rounded-2xl flex items-center justify-center space-x-1.5 font-bold text-xs sm:text-sm transition-all border-2 shadow-sm ${
-            canUndo && !isSpinning
-              ? 'bg-[#FFF0F3] hover:bg-[#FFE5EC] text-[#E05780] border-[#FFCAD4] hover:border-[#FF8FA3] active:scale-95'
-              : 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed opacity-50'
-          }`}
-        >
-          <RotateCcw size={16} />
-          <span>ย้อนกลับ</span>
-        </button>
-
-        {/* Giant Party Spin Button */}
-        <button
-          onClick={onSpin}
-          disabled={isSpinning || isCompleted}
-          className={`flex-1 px-7 py-3.5 sm:py-4 rounded-2xl font-black text-lg sm:text-xl flex items-center justify-center space-x-2.5 transition-all ${
-            isSpinning || isCompleted
-              ? 'bg-gray-200 text-gray-400 border-2 border-gray-300 cursor-not-allowed'
-              : 'party-btn-spin'
-          }`}
-        >
-          <Play size={20} className={isSpinning ? 'animate-spin' : 'fill-current'} />
-          <span>{isSpinning ? 'กำลังสุ่ม...' : isCompleted ? 'ครบทุกรางวัลแล้ว' : 'สุ่มรางวัล (SPIN)'}</span>
-          <span className="hidden md:inline-block text-[10px] bg-white/30 text-white font-mono font-black px-2 py-0.5 rounded-lg shadow-sm">
-            Spacebar
-          </span>
-        </button>
-
-        {/* Number Matrix / Manual Override Button */}
-        <button
-          onClick={onOpenMatrix}
-          disabled={isSpinning}
-          title="เปิดดูเลข 1-205 ทั้งหมด หรือคลิกคืนเลขเข้าโถได้ด้วยตนเอง"
-          className="px-4 py-3 rounded-2xl bg-[#E8F8F5] hover:bg-[#D1F2EB] text-[#117A65] border-2 border-[#A3E4D7] font-bold text-xs sm:text-sm flex items-center justify-center space-x-1.5 transition-all active:scale-95 shadow-sm"
-        >
-          <SlidersHorizontal size={16} />
-          <span>ผังเลข 1-205</span>
-        </button>
-      </div>
-
-      {/* Speed Controller Pills */}
-      <div className="mt-2.5 sm:mt-3 flex items-center space-x-2 text-xs text-gray-600 bg-white/80 border-2 border-gray-200 px-3.5 py-1.5 rounded-full shadow-sm">
-        <span className="font-bold text-gray-700 text-[11px]">จังหวะการลุ้น:</span>
-        <button
-          onClick={() => onChangeDuration(3000)}
-          className={`px-3 py-0.5 rounded-xl transition-all font-bold text-[11px] ${
-            spinDurationMs <= 3500
-              ? 'bg-[#FF8E53] text-white shadow-sm'
-              : 'bg-gray-100 text-gray-600 hover:text-black border border-gray-200'
-          }`}
-        >
-          ⚡ เร็ว (3s)
-        </button>
-        <button
-          onClick={() => onChangeDuration(5000)}
-          className={`px-3 py-0.5 rounded-xl transition-all font-bold text-[11px] ${
-            spinDurationMs > 3500 && spinDurationMs <= 5500
-              ? 'bg-[#FF8E53] text-white shadow-sm'
-              : 'bg-gray-100 text-gray-600 hover:text-black border border-gray-200'
-          }`}
-        >
-          ⏱️ มาตรฐาน (5s)
-        </button>
-        <button
-          onClick={() => onChangeDuration(7000)}
-          className={`px-3 py-0.5 rounded-xl transition-all font-bold text-[11px] ${
-            spinDurationMs > 5500
-              ? 'bg-[#FF8E53] text-white shadow-sm'
-              : 'bg-gray-100 text-gray-600 hover:text-black border border-gray-200'
-          }`}
-        >
-          🔥 ลุ้นระทึก (7s)
-        </button>
       </div>
     </div>
   );
